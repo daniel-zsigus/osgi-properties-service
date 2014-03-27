@@ -22,9 +22,9 @@
   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
-  objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+  objectQuotingStrategy="QUOTE_ALL_OBJECTS" logicalFilePath="org.everit.osgi.props">
 
-  <changeSet id="1" author="everit">
+  <changeSet id="1.0.0" author="everit" >
     
     <createTable tableName="prop_properties">
       <column name="key" type="varchar" >

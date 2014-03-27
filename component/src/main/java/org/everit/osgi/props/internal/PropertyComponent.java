@@ -35,7 +35,10 @@ import org.everit.osgi.cache.api.CacheConfiguration;
 import org.everit.osgi.cache.api.CacheFactory;
 import org.everit.osgi.cache.api.CacheHolder;
 import org.everit.osgi.props.PropertyService;
-import org.everit.osgi.props.schema.QProperties;
+import org.everit.osgi.props.PropertyServiceDataSourceConnectionException;
+import org.everit.osgi.props.PropertyServiceProps;
+import org.everit.osgi.props.schema.qdsl.QProperties;
+import org.everit.osgi.transaction.helper.api.Callback;
 import org.everit.osgi.transaction.helper.api.TransactionHelper;
 import org.osgi.framework.BundleContext;
 
@@ -45,14 +48,14 @@ import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
-@Component(name = "org.everit.osgi.props.PropertyComponent", metatype = true, configurationFactory = true,
+@Component(name = "org.everit.osgi.props.Property", metatype = true, configurationFactory = true,
         policy = ConfigurationPolicy.REQUIRE)
 @Properties({
-        @Property(name = "dataSource.target"),
-        @Property(name = "th.target"),
-        @Property(name = "sqlTemplate.target"),
-        @Property(name = "cacheConfiguration.target"),
-        @Property(name = "cacheFactory.target")
+        @Property(name = PropertyServiceProps.DATASOURCE_TARGET),
+        @Property(name = PropertyServiceProps.TRANSACTION_HELPER_TARGET),
+        @Property(name = PropertyServiceProps.SQLTEMPLATES_TARGET),
+        @Property(name = PropertyServiceProps.CACHECONFIGURATION_TARGET),
+        @Property(name = PropertyServiceProps.CACHEFACTORY_TARGET)
 })
 @Service
 public class PropertyComponent implements PropertyService {
@@ -64,7 +67,7 @@ public class PropertyComponent implements PropertyService {
     private TransactionHelper th;
 
     @Reference
-    private SQLTemplates sqlTemplate;
+    private SQLTemplates sqlTemplates;
 
     @Reference
     private CacheConfiguration<String, String> cacheConfiguration;
@@ -82,6 +85,27 @@ public class PropertyComponent implements PropertyService {
         cache = cacheHolder.getCache();
     }
 
+    @Override
+    public void addProperty(final String key, final String value) {
+        th.required(new Callback<Object>() {
+            @Override
+            public Object execute() {
+                try (Connection connection = dataSource.getConnection()) {
+                    QProperties prop = QProperties.propProperties;
+
+                    cache.put(key, value);
+                    new SQLInsertClause(connection, sqlTemplates, prop)
+                            .set(prop.key, key)
+                            .set(prop.value, value)
+                            .execute();
+                } catch (SQLException e) {
+                    throw new PropertyServiceDataSourceConnectionException("Cannot connect to DataSource.", e);
+                }
+                return null;
+            }
+        });
+    }
+
     @Deactivate
     public void deactivate(final BundleContext bundleContext) {
         cacheHolder.close();
@@ -90,16 +114,12 @@ public class PropertyComponent implements PropertyService {
     @Override
     public String getProperty(final String key) {
 
-        // test
         String cacheValue = cache.get(key);
         if (cacheValue != null) {
             return cacheValue;
         } else {
-            //
-            Connection connection = null;
-            try {
-                connection = dataSource.getConnection();
-                SQLQuery sqlQuery = new SQLQuery(connection, sqlTemplate);
+            try (Connection connection = dataSource.getConnection()) {
+                SQLQuery sqlQuery = new SQLQuery(connection, sqlTemplates);
                 QProperties prop = QProperties.propProperties;
                 List<String> values = sqlQuery.from(prop).where(prop.key.eq(key)).list(prop.value);
 
@@ -108,63 +128,65 @@ public class PropertyComponent implements PropertyService {
                 } else {
                     return values.get(0);
                 }
-
             } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } finally {
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                throw new PropertyServiceDataSourceConnectionException("Cannot connect to DataSource.", e);
             }
+        }
+    }
+
+    @Override
+    public String removeProperty(final String key) {
+        String previousValue = getProperty(key);
+
+        if (previousValue == null) {
+            return previousValue;
+        } else {
+            th.required(new Callback<Object>() {
+                @Override
+                public Object execute() {
+                    try (Connection connection = dataSource.getConnection()) {
+                        QProperties prop = QProperties.propProperties;
+
+                        cache.remove(key);
+                        new SQLDeleteClause(connection, sqlTemplates, prop)
+                                .where(prop.key.eq(key))
+                                .execute();
+                    } catch (SQLException e) {
+                        throw new PropertyServiceDataSourceConnectionException("Cannot connect to DataSource.", e);
+                    }
+                    return null;
+                }
+            });
+            return previousValue;
         }
     }
 
     @Override
     public String setProperty(final String key, final String newValue) {
         String previousValue = getProperty(key);
-        Connection connection = null;
-        try {
-            connection = dataSource.getConnection();
-            QProperties prop = QProperties.propProperties;
 
-            if (newValue == null) {
-                cache.remove(key);
-                new SQLDeleteClause(connection, sqlTemplate, prop)
-                        .where(prop.key.eq(key))
-                        .execute();
-
-            } else {
-                if (previousValue == null) {
-                    cache.put(key, newValue);
-                    new SQLInsertClause(connection, sqlTemplate, prop)
-                            .set(prop.key, key)
-                            .set(prop.value, newValue)
-                            .execute();
-                } else {
-                    cache.replace(key, newValue);
-                    new SQLUpdateClause(connection, sqlTemplate, prop)
-                            .where(prop.key.eq(key))
-                            .set(prop.value, newValue)
-                            .execute();
-                }
-            }
+        if (previousValue == null) {
             return previousValue;
+        } else {
+            th.required(new Callback<Object>() {
+                @Override
+                public Object execute() {
+                    try (Connection connection = dataSource.getConnection()) {
+                        QProperties prop = QProperties.propProperties;
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                        cache.replace(key, newValue);
+                        new SQLUpdateClause(connection, sqlTemplates, prop)
+                                .where(prop.key.eq(key))
+                                .set(prop.value, newValue)
+                                .execute();
+
+                    } catch (SQLException e) {
+                        throw new PropertyServiceDataSourceConnectionException("Cannot connect to DataSource.", e);
+                    }
+                    return null;
                 }
-            }
+            });
+            return previousValue;
         }
     }
-
 }

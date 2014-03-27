@@ -26,6 +26,7 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.everit.osgi.cache.infinispan.config.CacheFactoryProps;
 import org.everit.osgi.cache.infinispan.config.CacheProps;
+import org.everit.osgi.props.PropertyServiceProps;
 import org.everit.osgi.querydsl.templates.SQLTemplatesConstants;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -56,7 +57,7 @@ public class ConfigurationInitComponent {
 
             Dictionary<String, Object> migratedDataSourceProps = new Hashtable<String, Object>();
             migratedDataSourceProps.put("embeddedDataSource.target", "(service.pid=" + pooledDataSourcePid + ")");
-            migratedDataSourceProps.put("schemaExpression", "org.everit.osgi.props.schema");
+            migratedDataSourceProps.put("schemaExpression", "org.everit.osgi.props");
             String migratedDataSourcePid = getOrCreateConfiguration(
                     "org.everit.osgi.liquibase.datasource.LiquibaseDataSourceComponent",
                     migratedDataSourceProps);
@@ -72,20 +73,27 @@ public class ConfigurationInitComponent {
 
             // cache config
             Dictionary<String, Object> cacheFactoryProps = new Hashtable<String, Object>();
-            cacheFactoryProps.put(CacheFactoryProps.CLUSTERED, true);
+            cacheFactoryProps.put(CacheFactoryProps.CLUSTERED, false);
             cacheFactoryProps.put(CacheFactoryProps.GLOBAL_JMX_STATISTICS__ENABLED, false);
-            getOrCreateConfiguration(CacheFactoryProps.CACHE_FACTORY_COMPONENT_NAME, "("
-                    + CacheFactoryProps.GLOBAL_JMX_STATISTICS__ENABLED + "=false)",
+            String cacheFactoryPid = getOrCreateConfiguration(CacheFactoryProps.CACHE_FACTORY_COMPONENT_NAME,
                     cacheFactoryProps);
-            Dictionary<String, Object> simpleCacheConfigProps = new Hashtable<String, Object>();
-            simpleCacheConfigProps.put(CacheProps.CACHE_NAME, "simpleCache");
-            getOrCreateConfiguration(CacheProps.CACHE_CONFIGURATION_COMPONENT_NAME, "(" + CacheProps.CACHE_NAME
-                    + "=simpleCache)", simpleCacheConfigProps);
+            Dictionary<String, Object> cacheConfigProps = new Hashtable<String, Object>();
+            cacheConfigProps.put(CacheProps.CACHE_NAME, "simpleCache");
+            // cacheConfigProps.put(CacheProps.TRANSACTION__TRANSACTION_MODE,
+            // CacheProps.TRANSACTION__TRANSACTION_MODE_OPT_TRANSACTIONAL);
+            String cacheConfigPid = getOrCreateConfiguration(CacheProps.CACHE_CONFIGURATION_COMPONENT_NAME,
+                    cacheConfigProps);
 
             Dictionary<String, Object> propertyComponentProps = new Hashtable<String, Object>();
-            propertyComponentProps.put("dataSource.target", "(service.pid=" + migratedDataSourcePid + ")");
-            propertyComponentProps.put("sqlTemplate.target", "(service.pid=" + sqlTemplatePid + ")");
-            getOrCreateConfiguration("org.everit.osgi.props.PropertyComponent",
+            propertyComponentProps.put(PropertyServiceProps.DATASOURCE_TARGET, "(service.pid="
+                    + migratedDataSourcePid + ")");
+            propertyComponentProps.put(PropertyServiceProps.SQLTEMPLATES_TARGET, "(service.pid="
+                    + sqlTemplatePid + ")");
+            propertyComponentProps.put(PropertyServiceProps.CACHECONFIGURATION_TARGET, "(service.pid="
+                    + cacheConfigPid + ")");
+            propertyComponentProps.put(PropertyServiceProps.CACHEFACTORY_TARGET, "(service.pid="
+                    + cacheFactoryPid + ")");
+            getOrCreateConfiguration("org.everit.osgi.props.Property",
                     propertyComponentProps);
 
         } catch (IOException e) {

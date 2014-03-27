@@ -14,20 +14,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Everit - Property Service Component.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.everit.osgi.props.schema;
+package org.everit.osgi.props.schema.qdsl;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
-
-import com.mysema.query.types.path.*;
-
-import com.mysema.query.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
 
 import com.mysema.query.sql.ColumnMetadata;
-
-
-
+import com.mysema.query.types.Path;
+import com.mysema.query.types.PathMetadata;
+import com.mysema.query.types.PathMetadataFactory;
+import com.mysema.query.types.path.StringPath;
 
 /**
  * QProperties is a Querydsl query type for QProperties
@@ -45,23 +40,23 @@ public class QProperties extends com.mysema.query.sql.RelationalPathBase<QProper
 
     public final com.mysema.query.sql.PrimaryKey<QProperties> propPropertiesPk = createPrimaryKey(key);
 
-    public QProperties(String variable) {
-        super(QProperties.class, forVariable(variable), null, "prop_properties");
-        addMetadata();
-    }
-
-    public QProperties(String variable, String schema, String table) {
-        super(QProperties.class, forVariable(variable), schema, table);
-        addMetadata();
-    }
-
-    public QProperties(Path<? extends QProperties> path) {
+    public QProperties(final Path<? extends QProperties> path) {
         super(path.getType(), path.getMetadata(), null, "prop_properties");
         addMetadata();
     }
 
-    public QProperties(PathMetadata<?> metadata) {
+    public QProperties(final PathMetadata<?> metadata) {
         super(QProperties.class, metadata, null, "prop_properties");
+        addMetadata();
+    }
+
+    public QProperties(final String variable) {
+        super(QProperties.class, PathMetadataFactory.forVariable(variable), null, "prop_properties");
+        addMetadata();
+    }
+
+    public QProperties(final String variable, final String schema, final String table) {
+        super(QProperties.class, PathMetadataFactory.forVariable(variable), schema, table);
         addMetadata();
     }
 
@@ -71,4 +66,3 @@ public class QProperties extends com.mysema.query.sql.RelationalPathBase<QProper
     }
 
 }
-

@@ -17,7 +17,7 @@
 
 -->
 
-<lqmg xmlns="http://everit.org/lqmg" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" defaultPackage="org.everit.osgi.props.schema">
+<lqmg xmlns="http://everit.org/lqmg" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" defaultPackage="org.everit.osgi.props.schema.qdsl">
   <namingRules>
     <classNameRule>
       <entity>prop_properties</entity>

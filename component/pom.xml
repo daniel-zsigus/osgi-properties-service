@@ -39,8 +39,8 @@
 
   <properties>
     <projectpath>osgi-property-service</projectpath>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
 
   <scm>
@@ -111,7 +111,7 @@
               *
             </Import-Package>
             <Export-Package>${project.artifactId};version=${project.version}</Export-Package>
-            <Provide-Capability>liquibase.schema;name=org.everit.osgi.props.schema;resource=/META-INF/liquibase/properties.xml;
+            <Provide-Capability>liquibase.schema;name=org.everit.osgi.props;resource=/META-INF/liquibase/properties.xml;
               lqmg.config.resource=/META-INF/liquibase/properties.lqmg.xml
             </Provide-Capability>
           </instructions>
@@ -172,39 +172,47 @@
       <version>1.0.0</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.everit.osgi</groupId>
+      <artifactId>org.everit.osgi.cache.infinispan</artifactId>
+      <version>1.0.0-RC1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.everit.osgi</groupId>
+      <artifactId>org.everit.osgi.liquibase.datasource</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
 
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.jsr305</artifactId>
-      <version>2.0.1_1</version>
-      <scope>provided</scope>
+      <version>2.0.2_1</version>
     </dependency>
 
     <dependency>
       <groupId>org.ow2.spec.ee</groupId>
       <artifactId>ow2-atinject-1.0-spec</artifactId>
       <version>1.0.13</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.6</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.ow2.spec.ee</groupId>
       <artifactId>ow2-jta-1.1-spec</artifactId>
       <version>1.0.13</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.cache.infinispan</artifactId>
-      <version>1.0.0-RC1</version>
+      <groupId>org.ow2.spec.ee</groupId>
+      <artifactId>ow2-annotation-1.1-spec</artifactId>
+      <version>1.0.13</version>
     </dependency>
 
   </dependencies>

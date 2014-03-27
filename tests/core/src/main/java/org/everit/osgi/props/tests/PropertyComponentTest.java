@@ -28,7 +28,7 @@ import org.everit.osgi.props.PropertyService;
 import org.junit.Assert;
 import org.junit.Test;
 
-@Component(name = "PropertyComponentTest", immediate = true)
+@Component(immediate = true)
 @Service(value = PropertyComponentTest.class)
 @Properties({ @Property(name = "eosgi.testEngine", value = "junit4"),
         @Property(name = "eosgi.testId", value = "PropertyComponentTest"),
@@ -67,26 +67,41 @@ public class PropertyComponentTest {
     @TestDuringDevelopment
     public void testPropertyService() {
 
-        Assert.assertNull(propertyService.getProperty(generateString()));
-
         String key1 = generateString();
         String value1 = generateString();
 
-        String retValue = propertyService.setProperty(key1, value1);
+        Assert.assertNull(propertyService.getProperty(key1));
 
-        System.out.println(retValue);
-        Assert.assertNull(retValue);
+        propertyService.addProperty(key1, value1);
+        Assert.assertNotNull(propertyService.getProperty(key1));
         Assert.assertEquals(value1, propertyService.getProperty(key1));
 
         String value2 = generateString();
-        retValue = propertyService.setProperty(key1, value2);
-
-        Assert.assertTrue(value1.equals(retValue));
+        String retString = propertyService.setProperty(key1, value2);
+        Assert.assertTrue(value1.equals(retString));
         Assert.assertEquals(value2, propertyService.getProperty(key1));
 
-        propertyService.setProperty(key1, null);
-        Assert.assertNull(propertyService.getProperty(key1));
+        String key2 = generateString();
+        propertyService.addProperty(key2, value2);
+        Assert.assertEquals(value2, propertyService.getProperty(key2));
 
+        retString = propertyService.removeProperty(key2);
+        Assert.assertEquals(value2, retString);
+        Assert.assertNull(propertyService.getProperty(key2));
+
+        retString = propertyService.removeProperty("notexist");
+        Assert.assertNull(retString);
+
+        retString = propertyService.setProperty("notexist", "dummy");
+        Assert.assertNull(retString);
+        Assert.assertNull(propertyService.getProperty("notexist"));
+
+        try {
+            propertyService.setProperty(key1, null);
+            Assert.fail("setProperty should fail, because null values are not supported in the PropertyService");
+        } catch (NullPointerException e) {
+            Assert.assertTrue("Null values are not supported!".equals(e.getMessage()));
+        }
     }
 
     protected void unbindPropertyService(final PropertyService propertyService) {
