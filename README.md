@@ -1,4 +1,4 @@
 osgi-properties-service
 =======================
 
-This is the Everit osgi-properties-service
+A simple persistent key-value storage with cache support.
