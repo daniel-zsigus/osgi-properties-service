@@ -18,6 +18,11 @@ package org.everit.osgi.props;
 
 public class PropertyServiceDataSourceConnectionException extends RuntimeException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1931929866040641538L;
+
     public PropertyServiceDataSourceConnectionException(final String message, final Throwable cause) {
         super(message, cause);
     }

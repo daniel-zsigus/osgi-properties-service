@@ -48,7 +48,7 @@ import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
-@Component(name = "org.everit.osgi.props.Property", metatype = true, configurationFactory = true,
+@Component(name = PropertyServiceProps.PROPERTYSERVICE_COMPONENT_NAME, metatype = true, configurationFactory = true,
         policy = ConfigurationPolicy.REQUIRE)
 @Properties({
         @Property(name = PropertyServiceProps.DATASOURCE_TARGET),

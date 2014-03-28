@@ -80,8 +80,8 @@ public class ConfigurationInitComponent {
                     cacheFactoryProps);
             Dictionary<String, Object> cacheConfigProps = new Hashtable<String, Object>();
             cacheConfigProps.put(CacheProps.CACHE_NAME, "simpleCache");
-            // cacheConfigProps.put(CacheProps.TRANSACTION__TRANSACTION_MODE,
-            // CacheProps.TRANSACTION__TRANSACTION_MODE_OPT_TRANSACTIONAL);
+            cacheConfigProps.put(CacheProps.TRANSACTION__TRANSACTION_MODE,
+                    CacheProps.TRANSACTION__TRANSACTION_MODE_OPT_TRANSACTIONAL);
             String cacheConfigPid = getOrCreateConfiguration(CacheProps.CACHE_CONFIGURATION_COMPONENT_NAME,
                     cacheConfigProps);
 
@@ -94,7 +94,7 @@ public class ConfigurationInitComponent {
                     + cacheConfigPid + ")");
             propertyComponentProps.put(PropertyServiceProps.CACHEFACTORY_TARGET, "(service.pid="
                     + cacheFactoryPid + ")");
-            getOrCreateConfiguration("org.everit.osgi.props.Property",
+            getOrCreateConfiguration(PropertyServiceProps.PROPERTYSERVICE_COMPONENT_NAME,
                     propertyComponentProps);
 
         } catch (IOException e) {
@@ -115,23 +115,6 @@ public class ConfigurationInitComponent {
         if ((configurations != null) && (configurations.length > 0)) {
             return configurations[0].getFactoryPid();
         }
-        Configuration configuration = configAdmin.createFactoryConfiguration(factoryPid, null);
-        configuration.update(props);
-        return configuration.getPid();
-    }
-
-    private String getOrCreateConfiguration(final String factoryPid, final String filterParam,
-            final Dictionary<String, Object> props) throws IOException, InvalidSyntaxException {
-        String filter = "(service.factoryPid=" + factoryPid + ")";
-        if (filterParam != null) {
-            filter = "(&" + filter + filterParam + ")";
-        }
-
-        Configuration[] configurations = configAdmin.listConfigurations(filter);
-        if ((configurations != null) && (configurations.length > 0)) {
-            return configurations[0].getFactoryPid();
-        }
-
         Configuration configuration = configAdmin.createFactoryConfiguration(factoryPid, null);
         configuration.update(props);
         return configuration.getPid();

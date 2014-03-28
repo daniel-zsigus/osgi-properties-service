@@ -23,6 +23,7 @@ public final class PropertyServiceProps {
     public static final String SQLTEMPLATES_TARGET = "sqlTemplates.target";
     public static final String CACHEFACTORY_TARGET = "cacheFactory.target";
     public static final String CACHECONFIGURATION_TARGET = "cacheConfiguration.target";
+    public static final String PROPERTYSERVICE_COMPONENT_NAME = "org.everit.osgi.props.Property";
 
     private PropertyServiceProps() {
     }
