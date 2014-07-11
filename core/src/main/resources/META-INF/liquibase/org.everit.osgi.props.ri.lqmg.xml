@@ -1,0 +1,32 @@
+<!--
+
+    This file is part of Everit - Property Manager RI.
+
+    Everit - Property Manager RI is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Everit - Property Manager RI is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with Everit - Property Manager RI.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<lqmg xmlns="http://everit.org/lqmg" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" defaultPackage="org.everit.osgi.props.ri.schema.qdsl">
+  <namingRules>
+    <classNameRule>
+      <entity>prop_property</entity>
+      <class>Property</class>
+      <propertyMappings>
+        <primaryKey>
+          <name>pk_prop_property</name>
+          <property>propertyPk</property>
+        </primaryKey>
+      </propertyMappings>
+    </classNameRule>
+  </namingRules>
+</lqmg>
