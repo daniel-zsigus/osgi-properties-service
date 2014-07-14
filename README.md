@@ -1,4 +1,14 @@
-osgi-properties-service
-=======================
+property-manager-ri
+===================
 
-A simple persistent key-value storage with cache support.
+A persistent key-value storage with cache support. The data is stored in
+relational database.
+
+The module contains a configurable component that registers a PropertyManager
+OSGi service. The database schema is defined with Liquibase changelog files.
+The name of the liquibase capability is 'org.everit.osgi.props.ri'.
+
+For more information please see the [modularized persistence][1] article.
+
+[1]: http://everitorg.wordpress.com/2014/06/18/modularized-persistence/
+
