@@ -19,6 +19,7 @@ package org.everit.osgi.props.tests;
 import java.util.Random;
 
 import org.apache.felix.scr.annotations.Component;
+import org.apache.felix.scr.annotations.ConfigurationPolicy;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
@@ -28,9 +29,10 @@ import org.everit.osgi.props.PropertyManager;
 import org.junit.Assert;
 import org.junit.Test;
 
-@Component(immediate = true)
+@Component(name = "org.everit.osgi.props.ri.tests.PropertyManagerTest", immediate = true, configurationFactory = true,
+        policy = ConfigurationPolicy.REQUIRE, metatype = true)
 @Service(value = PropertyComponentTest.class)
-@Properties({ @Property(name = "eosgi.testEngine", value = "junit4"),
+@Properties({ @Property(name = "propertyManager.target"), @Property(name = "eosgi.testEngine", value = "junit4"),
         @Property(name = "eosgi.testId", value = "PropertyComponentTest") })
 public class PropertyComponentTest {
 

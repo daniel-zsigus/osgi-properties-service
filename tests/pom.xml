@@ -39,7 +39,7 @@
     <eosgi.testnum>2</eosgi.testnum>
   </properties>
 
-    
+
   <profiles>
     <profile>
       <id>travis</id>
@@ -132,7 +132,13 @@
                   javax.management.remote,
                   javax.security.auth,
                   javax.security.cert,
-                  org.ietf.jgss
+                  org.ietf.jgss,
+                  javax.crypto,
+                  javax.crypto.spec,
+                  javax.naming.ldap,
+                  javax.security.auth.callback,
+                  javax.security.auth.login,
+                  javax.security.auth.x500
                 </org.osgi.framework.system.packages>
               </systemProperties>
               <vmOptions>
@@ -307,6 +313,20 @@
       <groupId>org.everit.osgi</groupId>
       <artifactId>org.everit.osgi.querydsl.configuration</artifactId>
       <version>1.0.0</version>
+    </dependency>
+    
+    <!-- PostgreSQL -->
+
+    <dependency>
+      <groupId>org.apache.servicemix.bundles</groupId>
+      <artifactId>org.apache.servicemix.bundles.postgresql</artifactId>
+      <version>9.3-1100-jdbc41_1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.ops4j.pax.jdbc</groupId>
+      <artifactId>pax-jdbc-postgresql</artifactId>
+      <version>0.3.0</version>
     </dependency>
 
         <!-- Jetty with Http Service -->
