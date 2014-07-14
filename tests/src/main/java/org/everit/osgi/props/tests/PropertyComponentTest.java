@@ -64,6 +64,52 @@ public class PropertyComponentTest {
 
     @Test
     @TestDuringDevelopment
+    public void testNullParameter() {
+        try {
+            propertyManager.addProperty("test", null);
+            Assert.fail("NPE should have been thrown");
+        } catch (NullPointerException e) {
+            Assert.assertEquals("Null values are not supported!", e.getMessage());
+        }
+
+        try {
+            propertyManager.updateProperty("test", null);
+            Assert.fail("NPE should have been thrown");
+        } catch (NullPointerException e) {
+            Assert.assertEquals("Null values are not supported!", e.getMessage());
+        }
+
+        try {
+            propertyManager.addProperty(null, "test");
+            Assert.fail("NPE should have been thrown");
+        } catch (NullPointerException e) {
+            Assert.assertEquals("Null key is not supported!", e.getMessage());
+        }
+
+        try {
+            propertyManager.updateProperty(null, "test");
+            Assert.fail("NPE should have been thrown");
+        } catch (NullPointerException e) {
+            Assert.assertEquals("Null key is not supported!", e.getMessage());
+        }
+
+        try {
+            propertyManager.removeProperty(null);
+            Assert.fail("NPE should have been thrown");
+        } catch (NullPointerException e) {
+            Assert.assertEquals("Null key is not supported!", e.getMessage());
+        }
+
+        try {
+            propertyManager.getProperty(null);
+            Assert.fail("NPE should have been thrown");
+        } catch (NullPointerException e) {
+            Assert.assertEquals("Null key is not supported!", e.getMessage());
+        }
+    }
+
+    @Test
+    @TestDuringDevelopment
     public void testPropertyService() {
 
         String key1 = generateString();
@@ -94,12 +140,5 @@ public class PropertyComponentTest {
         retString = propertyManager.updateProperty("notexist", "dummy");
         Assert.assertNull(retString);
         Assert.assertNull(propertyManager.getProperty("notexist"));
-
-        try {
-            propertyManager.updateProperty(key1, null);
-            Assert.fail("setProperty should fail, because null values are not supported in the PropertyService");
-        } catch (NullPointerException e) {
-            Assert.assertTrue("Null values are not supported!".equals(e.getMessage()));
-        }
     }
 }

@@ -16,6 +16,7 @@
  */
 package org.everit.osgi.props.ri.internal;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.felix.scr.annotations.Activate;
@@ -45,11 +46,10 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
         configurationFactory = true,
         policy = ConfigurationPolicy.REQUIRE)
 @Properties({
-        @Property(name = PropertyManagerRIConstants.PROP_DATASOURCE_TARGET),
-        @Property(name = PropertyManagerRIConstants.PROP_TRANSACTION_HELPER_TARGET),
-        @Property(name = PropertyManagerRIConstants.PROP_SQLTEMPLATES_TARGET),
+        @Property(name = PropertyManagerRIConstants.PROP_QUERYDSL_SUPPORT_TARGET),
         @Property(name = PropertyManagerRIConstants.PROP_CACHECONFIGURATION_TARGET),
-        @Property(name = PropertyManagerRIConstants.PROP_CACHEFACTORY_TARGET)
+        @Property(name = PropertyManagerRIConstants.PROP_CACHEFACTORY_TARGET),
+        @Property(name = PropertyManagerRIConstants.PROP_TRANSACTION_HELPER_TARGET)
 })
 @Service
 public class PropertyComponent implements PropertyManager {
@@ -79,19 +79,18 @@ public class PropertyComponent implements PropertyManager {
 
     @Override
     public void addProperty(final String key, final String value) {
-        th.required(() -> {
-            querydslSupport.execute((connection, configuration) -> {
-                QProperty prop = new QProperty("p");
+        Objects.requireNonNull(key, "Null key is not supported!");
+        Objects.requireNonNull(value, "Null values are not supported!");
+        th.required(() -> querydslSupport.execute((connection, configuration) -> {
+            QProperty prop = new QProperty("p");
 
-                new SQLInsertClause(connection, configuration, prop)
-                        .set(prop.key, key)
-                        .set(prop.value, value)
-                        .execute();
-                return null;
-            });
-            cache.put(key, value);
+            new SQLInsertClause(connection, configuration, prop)
+                    .set(prop.key, key)
+                    .set(prop.value, value)
+                    .execute();
             return null;
-        });
+        }));
+
     }
 
     @Deactivate
@@ -101,6 +100,7 @@ public class PropertyComponent implements PropertyManager {
 
     @Override
     public String getProperty(final String key) {
+        Objects.requireNonNull(key, "Null key is not supported!");
 
         String cachedValue = cache.get(key);
         if (cachedValue != null) {
@@ -118,15 +118,18 @@ public class PropertyComponent implements PropertyManager {
 
     @Override
     public String removeProperty(final String key) {
+        Objects.requireNonNull(key, "Null key is not supported!");
+
         String previousValue = getProperty(key);
 
         boolean deleted = th.required(() -> querydslSupport.execute((connection, configuration) -> {
             QProperty prop = new QProperty("p");
 
-            cache.remove(key);
             long deletedRowNum = new SQLDeleteClause(connection, configuration, prop)
                     .where(prop.key.eq(key))
                     .execute();
+
+            cache.remove(key);
 
             return deletedRowNum > 0;
 
@@ -149,21 +152,23 @@ public class PropertyComponent implements PropertyManager {
 
     @Override
     public String updateProperty(final String key, final String newValue) {
+        Objects.requireNonNull(key, "Null key is not supported!");
+        Objects.requireNonNull(newValue, "Null values are not supported!");
         String previousValue = getProperty(key);
 
-        boolean deleted = th.required(() -> querydslSupport.execute((connection, configuration) -> {
+        boolean updated = th.required(() -> querydslSupport.execute((connection, configuration) -> {
             QProperty prop = new QProperty("p");
 
-            long deletedRowNum = new SQLUpdateClause(connection, configuration, prop)
+            long updatedRowNum = new SQLUpdateClause(connection, configuration, prop)
                     .where(prop.key.eq(key))
                     .set(prop.value, newValue)
                     .execute();
 
             cache.replace(key, newValue);
-            return deletedRowNum > 0;
+            return updatedRowNum > 0;
         }));
 
-        if (deleted) {
+        if (updated) {
             return previousValue;
         } else {
             return null;

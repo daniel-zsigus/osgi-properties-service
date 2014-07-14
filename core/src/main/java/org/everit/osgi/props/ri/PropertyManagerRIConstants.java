@@ -20,9 +20,8 @@ public final class PropertyManagerRIConstants {
 
     public static final String PROP_CACHECONFIGURATION_TARGET = "cacheConfiguration.target";
     public static final String PROP_CACHEFACTORY_TARGET = "cacheFactory.target";
-    public static final String PROP_DATASOURCE_TARGET = "dataSource.target";
-    public static final String PROP_SQLTEMPLATES_TARGET = "sqlTemplates.target";
-    public static final String PROP_TRANSACTION_HELPER_TARGET = "th.target";
+    public static final String PROP_QUERYDSL_SUPPORT_TARGET = "querydslSupport.target";
+    public static final String PROP_TRANSACTION_HELPER_TARGET = "transactionHelper.target";
     public static final String SERVICE_FACTORY_PID_PROPERTY_MANAGER = "org.everit.osgi.props.ri.PropertyManager";
 
     private PropertyManagerRIConstants() {
