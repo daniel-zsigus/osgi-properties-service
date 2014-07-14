@@ -27,7 +27,7 @@
     
     <createTable tableName="prop_property">
       <column name="key" type="varchar(255)" >
-        <constraints primaryKeyName="pk_prop_property" primaryKey="true" nullable="false" />
+        <constraints primaryKeyName="pk_prop_property" primaryKey="true" />
       </column>
       <column name="value" type="varchar(2000)">
         <constraints nullable="false" />

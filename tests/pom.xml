@@ -81,8 +81,7 @@
               <id>propertyManagerFelix</id>
               <framework>felix</framework>
               <systemProperties>
-                <jetty.port>8080</jetty.port>
-                <jetty.home.bundle>org.eclipse.jetty.osgi.boot</jetty.home.bundle>
+                <felix.cm.dir>${wrapper_home}/../config/configadmin</felix.cm.dir>
                 <org.osgi.framework.system.packages>
                   org.osgi.framework;version=1.7.0,
                   org.osgi.framework.hooks.bundle;version=1.1.0,
@@ -114,8 +113,8 @@
                 </org.osgi.framework.system.packages>
               </systemProperties>
               <vmOptions>
-                <vmOption>-Xdebug</vmOption>
-                <vmOption>-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n</vmOption>
+<!--                 <vmOption>-Xdebug</vmOption> -->
+<!--                 <vmOption>-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n</vmOption> -->
               </vmOptions>
             </environment>
           </environments>
