@@ -93,11 +93,12 @@
       <plugin>
         <groupId>org.everit.osgi.dev</groupId>
         <artifactId>eosgi-maven-plugin</artifactId>
-        <version>2.0.5</version>
+        <version>3.0.0</version>
         <configuration>
           <sourceDistPath>${source.dist.folder}</sourceDistPath>
           <jacoco>
             <includes>org.everit.osgi.props.*</includes>
+            <output>$${ if (System.getenv("EOSGI_STOP_AFTER_TESTS").equals("true")) "file"; else "tcpserver"; }</output>
           </jacoco>
           <environments>
             <environment>
@@ -167,7 +168,6 @@
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.7</version>
     </dependency>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -312,6 +312,12 @@
     <dependency>
       <groupId>org.everit.osgi</groupId>
       <artifactId>org.everit.osgi.querydsl.configuration</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.everit.osgi</groupId>
+      <artifactId>org.everit.osgi.cache.noop</artifactId>
       <version>1.0.0</version>
     </dependency>
     
