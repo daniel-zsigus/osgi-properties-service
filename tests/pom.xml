@@ -51,7 +51,7 @@
       </activation>
       <properties>
         <source.dist.folder>${basedir}/src/dist/travis/</source.dist.folder>
-        <eosgi.testnum>4</eosgi.testnum>
+        <eosgi.testnum>6</eosgi.testnum>
       </properties>
     </profile>
   </profiles>
@@ -314,7 +314,7 @@
       <artifactId>org.everit.osgi.querydsl.configuration</artifactId>
       <version>1.0.0</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.everit.osgi</groupId>
       <artifactId>org.everit.osgi.cache.noop</artifactId>
@@ -335,7 +335,21 @@
       <version>0.3.0</version>
     </dependency>
 
-        <!-- Jetty with Http Service -->
+    <!-- MySQL -->
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.31</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.ops4j.pax.jdbc</groupId>
+      <artifactId>pax-jdbc-mysql</artifactId>
+      <version>0.3.0</version>
+    </dependency>
+
+    <!-- Jetty with Http Service -->
 
     <dependency>
       <groupId>org.apache.felix</groupId>
