@@ -13,6 +13,6 @@ work on other database engines, too.
 
 For more information please see the [modularized persistence][1] article.
 
-[![Analytics](https://ga-beacon.appspot.com/UA-15041869-4/everit-org/property-manager-api)](https://github.com/igrigorik/ga-beacon)
+[![Analytics](https://ga-beacon.appspot.com/UA-15041869-4/everit-org/property-manager-ri)](https://github.com/igrigorik/ga-beacon)
 
 [1]: http://everitorg.wordpress.com/2014/06/18/modularized-persistence/
