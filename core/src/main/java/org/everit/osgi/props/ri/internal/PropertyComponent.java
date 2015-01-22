@@ -19,23 +19,18 @@ package org.everit.osgi.props.ri.internal;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.ConfigurationPolicy;
-import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
-import org.everit.osgi.cache.CacheConfiguration;
-import org.everit.osgi.cache.CacheFactory;
-import org.everit.osgi.cache.CacheHolder;
 import org.everit.osgi.props.PropertyManager;
 import org.everit.osgi.props.ri.PropertyManagerRIConstants;
 import org.everit.osgi.props.ri.schema.qdsl.QProperty;
 import org.everit.osgi.querydsl.support.QuerydslSupport;
 import org.everit.osgi.transaction.helper.api.TransactionHelper;
-import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
@@ -46,36 +41,23 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
         configurationFactory = true,
         policy = ConfigurationPolicy.REQUIRE)
 @Properties({
+        @Property(name = Constants.SERVICE_DESCRIPTION, propertyPrivate = false,
+                value = PropertyManagerRIConstants.DEFAULT_SERVICE_DESCRIPTION),
         @Property(name = PropertyManagerRIConstants.PROP_QUERYDSL_SUPPORT_TARGET),
-        @Property(name = PropertyManagerRIConstants.PROP_CACHECONFIGURATION_TARGET),
-        @Property(name = PropertyManagerRIConstants.PROP_CACHEFACTORY_TARGET),
+        @Property(name = PropertyManagerRIConstants.PROP_CACHE_TARGET, value = "(cache.name=noop)"),
         @Property(name = PropertyManagerRIConstants.PROP_TRANSACTION_HELPER_TARGET)
 })
 @Service
 public class PropertyComponent implements PropertyManager {
 
+    @Reference(bind = "setCache")
     private ConcurrentMap<String, String> cache;
-
-    @Reference
-    private CacheConfiguration<String, String> cacheConfiguration;
-
-    @Reference
-    private CacheFactory cacheFactory;
-
-    private CacheHolder<String, String> cacheHolder;
 
     @Reference(bind = "setQuerydslSupport")
     private QuerydslSupport querydslSupport;
 
     @Reference(name = "transactionHelper", bind = "setTransactionHelper")
     private TransactionHelper th;
-
-    @Activate
-    public void activate(final BundleContext bundleContext) {
-        cacheHolder = cacheFactory.createCache(
-                cacheConfiguration, this.getClass().getClassLoader());
-        cache = cacheHolder.getCache();
-    }
 
     @Override
     public void addProperty(final String key, final String value) {
@@ -91,11 +73,6 @@ public class PropertyComponent implements PropertyManager {
             return null;
         }));
 
-    }
-
-    @Deactivate
-    public void deactivate(final BundleContext bundleContext) {
-        cacheHolder.close();
     }
 
     @Override
@@ -142,11 +119,15 @@ public class PropertyComponent implements PropertyManager {
         }
     }
 
-    public void setQuerydslSupport(QuerydslSupport querydslSupport) {
+    public void setCache(final ConcurrentMap<String, String> cache) {
+        this.cache = cache;
+    }
+
+    public void setQuerydslSupport(final QuerydslSupport querydslSupport) {
         this.querydslSupport = querydslSupport;
     }
 
-    public void setTransactionHelper(TransactionHelper th) {
+    public void setTransactionHelper(final TransactionHelper th) {
         this.th = th;
     }
 
