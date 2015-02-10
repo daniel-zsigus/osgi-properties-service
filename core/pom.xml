@@ -113,12 +113,28 @@
             <Import-Package>
               *
             </Import-Package>
-            <Export-Package>${project.artifactId}.schema.qdsl</Export-Package>
-            <Provide-Capability>liquibase.schema;name=org.everit.osgi.props.ri;resource=/META-INF/liquibase/org.everit.osgi.props.ri.changelog.xml;
-              lqmg.config.resource=/META-INF/liquibase/org.everit.osgi.props.ri.lqmg.xml
+            <Export-Package>
+              org.everit.osgi.props.ri;version=1.0.0,
+              org.everit.osgi.props.ri.schema.qdsl;version=1.0.0
+            </Export-Package>
+            <Provide-Capability>
+              liquibase.schema;name=org.everit.osgi.props.ri;resource=/META-INF/liquibase/org.everit.osgi.props.ri.changelog.xml;lqmg.config.resource=/META-INF/liquibase/org.everit.osgi.props.ri.lqmg.xml
             </Provide-Capability>
           </instructions>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>net.distilledcode.maven</groupId>
+        <artifactId>baselining-maven-plugin</artifactId>
+        <version>1.0.4</version>
+        <executions>
+          <execution>
+            <id>baseline</id>
+            <goals>
+              <goal>baseline</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.felix</groupId>
@@ -187,4 +203,5 @@
       <version>1.0.0</version>
     </dependency>
   </dependencies>
+
 </project>

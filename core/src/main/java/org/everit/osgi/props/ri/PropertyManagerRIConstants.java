@@ -18,11 +18,17 @@ package org.everit.osgi.props.ri;
 
 public final class PropertyManagerRIConstants {
 
-    public static final String DEFAULT_SERVICE_DESCRIPTION = "Default Property Manager";
-    public static final String PROP_CACHE_TARGET = "cache.target";
-    public static final String PROP_QUERYDSL_SUPPORT_TARGET = "querydslSupport.target";
-    public static final String PROP_TRANSACTION_HELPER_TARGET = "transactionHelper.target";
     public static final String SERVICE_FACTORY_PID_PROPERTY_MANAGER = "org.everit.osgi.props.ri.PropertyManager";
+
+    public static final String DEFAULT_SERVICE_DESCRIPTION = "Default Property Manager";
+
+    public static final String PROP_CACHE_TARGET = "cache.target";
+
+    public static final String DEFAULT_CACHE_TARGET = "(MUST_BE_SET=TO_SOMETHING)";
+
+    public static final String PROP_QUERYDSL_SUPPORT_TARGET = "querydslSupport.target";
+
+    public static final String PROP_TRANSACTION_HELPER_TARGET = "transactionHelper.target";
 
     private PropertyManagerRIConstants() {
     }

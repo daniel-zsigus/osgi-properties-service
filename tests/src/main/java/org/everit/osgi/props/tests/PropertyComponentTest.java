@@ -24,7 +24,6 @@ import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
-import org.everit.osgi.dev.testrunner.TestDuringDevelopment;
 import org.everit.osgi.props.PropertyManager;
 import org.junit.Assert;
 import org.junit.Test;
@@ -60,12 +59,11 @@ public class PropertyComponentTest {
         return new String(text);
     }
 
-    public void setPropertyManager(PropertyManager propertyManager) {
+    public void setPropertyManager(final PropertyManager propertyManager) {
         this.propertyManager = propertyManager;
     }
 
     @Test
-    @TestDuringDevelopment
     public void testNullParameter() {
         try {
             propertyManager.addProperty("test", null);
@@ -111,7 +109,6 @@ public class PropertyComponentTest {
     }
 
     @Test
-    @TestDuringDevelopment
     public void testPropertyService() {
 
         String key1 = generateString();

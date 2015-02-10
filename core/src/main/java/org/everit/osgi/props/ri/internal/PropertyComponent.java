@@ -44,8 +44,9 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
         @Property(name = Constants.SERVICE_DESCRIPTION, propertyPrivate = false,
                 value = PropertyManagerRIConstants.DEFAULT_SERVICE_DESCRIPTION),
         @Property(name = PropertyManagerRIConstants.PROP_QUERYDSL_SUPPORT_TARGET),
-        @Property(name = PropertyManagerRIConstants.PROP_CACHE_TARGET, value = "(cache.driver.name=noop)"),
-        @Property(name = PropertyManagerRIConstants.PROP_TRANSACTION_HELPER_TARGET)
+        @Property(name = PropertyManagerRIConstants.PROP_TRANSACTION_HELPER_TARGET),
+        @Property(name = PropertyManagerRIConstants.PROP_CACHE_TARGET,
+                value = PropertyManagerRIConstants.DEFAULT_CACHE_TARGET)
 })
 @Service
 public class PropertyComponent implements PropertyManager {
