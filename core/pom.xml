@@ -111,6 +111,7 @@
           <instructions>
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Import-Package>
+              org.everit.osgi.props;version="[1.0,2)",
               *
             </Import-Package>
             <Export-Package>
