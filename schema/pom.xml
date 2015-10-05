@@ -20,7 +20,6 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.everit.config</groupId>
     <artifactId>org.everit.config.oss</artifactId>
@@ -28,18 +27,18 @@
   </parent>
 
   <groupId>org.everit.props</groupId>
-  <artifactId>org.everit.props.ri</artifactId>
+  <artifactId>org.everit.props.ri.schema.qdsl</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <packaging>bundle</packaging>
-  <name>Everit - Property Manager RI</name>
-  <description>Database backed reference implementation of Property Manager</description>
 
+  <name>Everit - Property Manager RI Schema</name>
+  <description>The database schema of the Property Manager RI component based on QueryDSL.</description>
 
   <properties>
-    <projectpath>property-manager-ri</projectpath>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <projectpath>resource-ri</projectpath>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
   </properties>
 
   <scm>
@@ -87,9 +86,49 @@
               *
             </Import-Package>
             <Export-Package>
-              org.everit.props.ri
+              org.everit.props.ri.schema.qdsl
             </Export-Package>
+            <Require-Capability>
+            </Require-Capability>
+            <Provide-Capability>
+              liquibase.schema;name=org.everit.props.ri;resource=/META-INF/liquibase/org.everit.props.ri.changelog.xml;lqmg.config.resource=/META-INF/liquibase/org.everit.props.ri.lqmg.xml
+            </Provide-Capability>
           </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.everit.osgi.dev</groupId>
+        <artifactId>lqmg-maven-plugin</artifactId>
+        <version>3.0.1</version>
+        <configuration>
+          <defaultSchema>org.everit.props.ri</defaultSchema>
+          <capability>org.everit.props.ri</capability>
+          <packages>org.everit.props.ri.schema.qdsl</packages>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/main/generated/java/</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <configuration>
+          <excludeFilterFile>props-findbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
       </plugin>
     </plugins>
@@ -97,25 +136,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.everit.props</groupId>
-      <artifactId>org.everit.props.api</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.everit.props</groupId>
-      <artifactId>org.everit.props.ri.schema.qdsl</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.everit.transaction</groupId>
-      <artifactId>org.everit.transaction.propagator.api</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.everit.persistence</groupId>
-      <artifactId>org.everit.persistence.querydsl.support.api</artifactId>
-      <version>1.0.0</version>
+      <groupId>com.mysema.querydsl</groupId>
+      <artifactId>querydsl-sql</artifactId>
+      <version>3.6.7</version>
     </dependency>
   </dependencies>
 
