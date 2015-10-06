@@ -45,10 +45,12 @@ public class PropertyManagerImpl implements PropertyManager {
   public PropertyManagerImpl(final ConcurrentMap<String, String> cache,
       final QuerydslSupport querydslSupport,
       final TransactionPropagator transactionPropagator) {
-    this.cache = Objects.requireNonNull(cache, "chache cannot be null");
-    this.querydslSupport = Objects.requireNonNull(querydslSupport, "chache cannot be null");
-    this.transactionPropagator =
-        Objects.requireNonNull(transactionPropagator, "chache cannot be null");
+    this.cache = Objects.requireNonNull(cache,
+        "chache cannot be null");
+    this.querydslSupport = Objects.requireNonNull(querydslSupport,
+        "querydslSupport cannot be null");
+    this.transactionPropagator = Objects.requireNonNull(transactionPropagator,
+        "transactionPropagator cannot be null");
   }
 
   @Override
