@@ -15,15 +15,16 @@
  */
 package org.everit.props.ri.schema.qdsl;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.mysema.query.types.path.*;
+import com.querydsl.core.types.dsl.*;
 
-import com.mysema.query.types.PathMetadata;
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -31,8 +32,8 @@ import com.mysema.query.sql.ColumnMetadata;
 /**
  * QProperty is a Querydsl query type for QProperty
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QProperty extends com.mysema.query.sql.RelationalPathBase<QProperty> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QProperty extends com.querydsl.sql.RelationalPathBase<QProperty> {
 
     private static final long serialVersionUID = -138262541;
 
@@ -40,7 +41,7 @@ public class QProperty extends com.mysema.query.sql.RelationalPathBase<QProperty
 
     public class PrimaryKeys {
 
-        public final com.mysema.query.sql.PrimaryKey<QProperty> propertyPk = createPrimaryKey(key);
+        public final com.querydsl.sql.PrimaryKey<QProperty> propertyPk = createPrimaryKey(key);
 
     }
 
@@ -65,14 +66,14 @@ public class QProperty extends com.mysema.query.sql.RelationalPathBase<QProperty
         addMetadata();
     }
 
-    public QProperty(PathMetadata<?> metadata) {
+    public QProperty(PathMetadata metadata) {
         super(QProperty.class, metadata, "org.everit.props.ri", "prop_property");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(key, ColumnMetadata.named("key").ofType(12).withSize(255).notNull());
-        addMetadata(value, ColumnMetadata.named("value").ofType(12).withSize(2000).notNull());
+        addMetadata(key, ColumnMetadata.named("key").withIndex(1).ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(value, ColumnMetadata.named("value").withIndex(2).ofType(Types.VARCHAR).withSize(2000).notNull());
     }
 
 }

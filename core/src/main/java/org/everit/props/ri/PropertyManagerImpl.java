@@ -23,10 +23,10 @@ import org.everit.props.PropertyManager;
 import org.everit.props.ri.schema.qdsl.QProperty;
 import org.everit.transaction.propagator.TransactionPropagator;
 
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLDeleteClause;
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLDeleteClause;
+import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
 
 /**
  * Implementation of {@link PropertyManager}.
@@ -79,10 +79,11 @@ public class PropertyManagerImpl implements PropertyManager {
 
     String value = querydslSupport.execute((connection, configuration) -> {
       QProperty prop = QProperty.property;
-      return new SQLQuery(connection, configuration)
+      return new SQLQuery<String>(connection, configuration)
+          .select(prop.value)
           .from(prop)
           .where(prop.key.eq(key))
-          .uniqueResult(prop.value);
+          .fetchFirst();
     });
     cache.put(key, value);
     return value;
