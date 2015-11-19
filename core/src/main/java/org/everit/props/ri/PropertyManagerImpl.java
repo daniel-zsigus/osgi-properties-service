@@ -83,7 +83,7 @@ public class PropertyManagerImpl implements PropertyManager {
           .select(prop.value)
           .from(prop)
           .where(prop.key.eq(key))
-          .fetchFirst();
+          .fetchOne();
     });
     cache.put(key, value);
     return value;
