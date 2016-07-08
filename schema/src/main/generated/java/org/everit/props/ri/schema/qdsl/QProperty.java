@@ -37,7 +37,7 @@ public class QProperty extends com.querydsl.sql.RelationalPathBase<QProperty> {
 
     private static final long serialVersionUID = -138262541;
 
-    public static final QProperty property = new QProperty("prop_property");
+    public static final QProperty property = new QProperty("PROP_PROPERTY");
 
     public class PrimaryKeys {
 
@@ -52,7 +52,7 @@ public class QProperty extends com.querydsl.sql.RelationalPathBase<QProperty> {
     public final PrimaryKeys pk = new PrimaryKeys();
 
     public QProperty(String variable) {
-        super(QProperty.class, forVariable(variable), "org.everit.props.ri", "prop_property");
+        super(QProperty.class, forVariable(variable), "org.everit.props.ri", "PROP_PROPERTY");
         addMetadata();
     }
 
@@ -62,18 +62,18 @@ public class QProperty extends com.querydsl.sql.RelationalPathBase<QProperty> {
     }
 
     public QProperty(Path<? extends QProperty> path) {
-        super(path.getType(), path.getMetadata(), "org.everit.props.ri", "prop_property");
+        super(path.getType(), path.getMetadata(), "org.everit.props.ri", "PROP_PROPERTY");
         addMetadata();
     }
 
     public QProperty(PathMetadata metadata) {
-        super(QProperty.class, metadata, "org.everit.props.ri", "prop_property");
+        super(QProperty.class, metadata, "org.everit.props.ri", "PROP_PROPERTY");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(key, ColumnMetadata.named("key").withIndex(1).ofType(Types.VARCHAR).withSize(255).notNull());
-        addMetadata(value, ColumnMetadata.named("value").withIndex(2).ofType(Types.VARCHAR).withSize(2000).notNull());
+        addMetadata(key, ColumnMetadata.named("KEY_").withIndex(1).ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(value, ColumnMetadata.named("VALUE_").withIndex(2).ofType(Types.VARCHAR).withSize(2000).notNull());
     }
 
 }

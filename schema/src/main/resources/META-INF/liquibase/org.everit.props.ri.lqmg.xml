@@ -16,16 +16,25 @@
 
 -->
 <lqmg xmlns="http://everit.org/lqmg" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://everit.org/lqmg http://everit.org/xml/ns/lqmg/lqmg-3.0.0.xsd"
   defaultPackage="org.everit.props.ri.schema.qdsl">
   <namingRules>
     <classNameRule>
-      <entity>prop_property</entity>
+      <entity>PROP_PROPERTY</entity>
       <class>Property</class>
       <propertyMappings>
         <primaryKey>
-          <name>pk_prop_property</name>
+          <name>PK_PROP_PROPERTY</name>
           <property>propertyPk</property>
         </primaryKey>
+        <column>
+          <name>KEY_</name>
+          <property>key</property>
+        </column>
+        <column>
+          <name>VALUE_</name>
+          <property>value</property>
+        </column>
       </propertyMappings>
     </classNameRule>
   </namingRules>
