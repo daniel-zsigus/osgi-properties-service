@@ -29,7 +29,7 @@
 
   <groupId>org.everit.props</groupId>
   <artifactId>org.everit.props.ri</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 
   <packaging>bundle</packaging>
   <name>Everit - Property Manager RI</name>
@@ -87,7 +87,7 @@
               *
             </Import-Package>
             <Export-Package>
-              org.everit.props.ri
+              org.everit.props.ri;version="3.0.0"
             </Export-Package>
           </instructions>
         </configuration>
@@ -104,7 +104,7 @@
     <dependency>
       <groupId>org.everit.props</groupId>
       <artifactId>org.everit.props.ri.schema.qdsl</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0</version>
     </dependency>
 
     <dependency>

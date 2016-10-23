@@ -20,46 +20,15 @@
   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
-  objectQuotingStrategy="QUOTE_ALL_OBJECTS" logicalFilePath="org.everit.props.ri.schema">
-
-<!--   <changeSet id="1.0.0" author="everit"> -->
-<!--     <createTable tableName="prop_property"> -->
-<!--       <column name="key" type="varchar(255)"> -->
-<!--         <constraints primaryKeyName="pk_prop_property" primaryKey="true" /> -->
-<!--       </column> -->
-<!--       <column name="value" type="varchar(2000)"> -->
-<!--         <constraints nullable="false" /> -->
-<!--       </column> -->
-<!--     </createTable> -->
-<!--   </changeSet> -->
-
-  <changeSet id="1.0.0-2.0.0" author="everit">
-    <preConditions onFail="CONTINUE">
-      <changeSetExecuted author="everit" id="1.0.0" />
-    </preConditions>
-    
-    <dropPrimaryKey tableName="prop_property" />
-    <renameTable newTableName="PROP_PROPERTY_TMP" oldTableName="prop_property" />
-    <renameTable newTableName="PROP_PROPERTY" oldTableName="PROP_PROPERTY_TMP" />
-    <renameColumn tableName="PROP_PROPERTY" oldColumnName="key" newColumnName="KEY_" columnDataType="varchar(255)" />
-    <renameColumn tableName="PROP_PROPERTY" oldColumnName="value" newColumnName="VALUE_" columnDataType="varchar(2000)" />
-    <addNotNullConstraint tableName="PROP_PROPERTY" columnName="KEY_" columnDataType="varchar(255)" />
-    <addPrimaryKey columnNames="KEY_" tableName="PROP_PROPERTY" constraintName="PK_PROP_PROPERTY" />
-  </changeSet>
+  objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS" logicalFilePath="org.everit.props.ri.schema">
 
 
-  <changeSet id="2.0.0" author="everit">
-    <preConditions onFail="MARK_RAN">
-      <not>
-        <changeSetExecuted author="everit" id="1.0.0" />
-      </not>
-    </preConditions>
-
-    <createTable tableName="PROP_PROPERTY">
-      <column name="KEY_" type="varchar(255)">
-        <constraints primaryKeyName="PK_PROP_PROPERTY" nullable="false" primaryKey="true" />
+  <changeSet id="3.0.0" author="everit">
+    <createTable tableName="prop_property">
+      <column name="key_" type="varchar(255)">
+        <constraints primaryKeyName="pk_prop_property" nullable="false" primaryKey="true" />
       </column>
-      <column name="VALUE_" type="varchar(2000)">
+      <column name="value_" type="varchar(2000)">
         <constraints nullable="false" />
       </column>
     </createTable>

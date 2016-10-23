@@ -20,19 +20,19 @@
   defaultPackage="org.everit.props.ri.schema.qdsl">
   <namingRules>
     <classNameRule>
-      <entity>PROP_PROPERTY</entity>
+      <entity>prop_property</entity>
       <class>Property</class>
       <propertyMappings>
         <primaryKey>
-          <name>PK_PROP_PROPERTY</name>
+          <name>pk_prop_property</name>
           <property>propertyPk</property>
         </primaryKey>
         <column>
-          <name>KEY_</name>
+          <name>key_</name>
           <property>key</property>
         </column>
         <column>
-          <name>VALUE_</name>
+          <name>value_</name>
           <property>value</property>
         </column>
       </propertyMappings>

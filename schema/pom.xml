@@ -29,7 +29,7 @@
 
   <groupId>org.everit.props</groupId>
   <artifactId>org.everit.props.ri.schema.qdsl</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 
   <packaging>bundle</packaging>
 
@@ -87,12 +87,12 @@
               *
             </Import-Package>
             <Export-Package>
-              org.everit.props.ri.schema.qdsl;version="2.0.0"
+              org.everit.props.ri.schema.qdsl;version="3.0.0"
             </Export-Package>
             <Require-Capability>
             </Require-Capability>
             <Provide-Capability>
-              liquibase.changelog;liquibase.changelog=org.everit.props.ri;resource=/META-INF/liquibase/org.everit.props.ri.changelog.xml;lqmg.config.resource=/META-INF/liquibase/org.everit.props.ri.lqmg.xml;version:Version="2.0.0"
+              liquibase.changelog;liquibase.changelog=org.everit.props.ri;resource=/META-INF/liquibase/org.everit.props.ri.changelog.xml;lqmg.config.resource=/META-INF/liquibase/org.everit.props.ri.lqmg.xml;version:Version="3.0.0"
             </Provide-Capability>
           </instructions>
         </configuration>
