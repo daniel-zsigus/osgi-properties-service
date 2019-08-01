@@ -22,6 +22,8 @@ import org.everit.persistence.querydsl.support.QuerydslSupport;
 import org.everit.props.PropertyManager;
 import org.everit.props.ri.schema.qdsl.QProperty;
 import org.everit.transaction.propagator.TransactionPropagator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
@@ -32,6 +34,8 @@ import com.querydsl.sql.dml.SQLUpdateClause;
  * Implementation of {@link PropertyManager}.
  */
 public class PropertyManagerImpl implements PropertyManager {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(PropertyManagerImpl.class);
 
   private ConcurrentMap<String, String> cache;
 
@@ -57,14 +61,15 @@ public class PropertyManagerImpl implements PropertyManager {
   public void addProperty(final String key, final String value) {
     Objects.requireNonNull(key, "Null key is not supported!");
     Objects.requireNonNull(value, "Null values are not supported!");
-    transactionPropagator.required(() -> querydslSupport.execute((connection, configuration) -> {
-      QProperty prop = QProperty.property;
+    this.transactionPropagator
+        .required(() -> this.querydslSupport.execute((connection, configuration) -> {
+          QProperty prop = QProperty.property;
 
-      return new SQLInsertClause(connection, configuration, prop)
-          .set(prop.key, key)
-          .set(prop.value, value)
-          .execute();
-    }));
+          return new SQLInsertClause(connection, configuration, prop)
+              .set(prop.key, key)
+              .set(prop.value, value)
+              .execute();
+        }));
 
   }
 
@@ -72,12 +77,12 @@ public class PropertyManagerImpl implements PropertyManager {
   public String getProperty(final String key) {
     Objects.requireNonNull(key, "Null key is not supported!");
 
-    String cachedValue = cache.get(key);
+    String cachedValue = this.cache.get(key);
     if (cachedValue != null) {
       return cachedValue;
     }
 
-    String value = querydslSupport.execute((connection, configuration) -> {
+    String value = this.querydslSupport.execute((connection, configuration) -> {
       QProperty prop = QProperty.property;
       return new SQLQuery<String>(connection, configuration)
           .select(prop.value)
@@ -85,7 +90,12 @@ public class PropertyManagerImpl implements PropertyManager {
           .where(prop.key.eq(key))
           .fetchOne();
     });
-    cache.put(key, value);
+    try {
+      this.cache.put(key, value);
+    } catch (NullPointerException e) {
+      LOGGER.warn("Cannot cache null value for key [" + key + "], because the cache "
+          + "implementation [" + this.cache.getClass() + "] does not permit null values.");
+    }
     return value;
   }
 
@@ -95,15 +105,15 @@ public class PropertyManagerImpl implements PropertyManager {
 
     String previousValue = getProperty(key);
 
-    boolean deleted = transactionPropagator.required(() -> {
-      return querydslSupport.execute((connection, configuration) -> {
+    boolean deleted = this.transactionPropagator.required(() -> {
+      return this.querydslSupport.execute((connection, configuration) -> {
         QProperty prop = QProperty.property;
 
         long deletedRowNum = new SQLDeleteClause(connection, configuration, prop)
             .where(prop.key.eq(key))
             .execute();
 
-        cache.remove(key);
+        this.cache.remove(key);
 
         return deletedRowNum > 0;
       });
@@ -122,8 +132,8 @@ public class PropertyManagerImpl implements PropertyManager {
     Objects.requireNonNull(newValue, "Null values are not supported!");
     String previousValue = getProperty(key);
 
-    boolean updated = transactionPropagator.required(() -> {
-      return querydslSupport.execute((connection, configuration) -> {
+    boolean updated = this.transactionPropagator.required(() -> {
+      return this.querydslSupport.execute((connection, configuration) -> {
         QProperty prop = QProperty.property;
 
         long updatedRowNum = new SQLUpdateClause(connection, configuration, prop)
@@ -131,7 +141,7 @@ public class PropertyManagerImpl implements PropertyManager {
             .set(prop.value, newValue)
             .execute();
 
-        cache.replace(key, newValue);
+        this.cache.replace(key, newValue);
         return updatedRowNum > 0;
       });
     });
